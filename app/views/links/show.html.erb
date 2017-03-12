@@ -3,15 +3,8 @@
 </div>
 
 <div class="btn-group">
-    <%= link_to 'Visit URL', @link.url, class: "btn btn-primary" %>
+	<%= link_to 'Visit URL', @link.url, class: "btn btn-primary" %>
 </div>
-
-<% if @link.user == current_user -%>
-    <div class="btn-group">
-        <%= link_to 'Edit', edit_link_path(@link), class: "btn btn-default" %>
-        <%= link_to 'Destroy', @link, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-default" %>
-    </div>
-<% end %>
 
 <div class="btn-group pull-right">
   <%= link_to like_link_path(@link), method: :put, class: "btn btn-default btn-sm" do %>
@@ -25,3 +18,25 @@
     <%= @link.get_downvotes.size %>
   <% end %>
 </div>
+
+<% if @link.user == current_user -%>
+	<div class="btn-group">
+		<%= link_to 'Edit', edit_link_path(@link), class: "btn btn-default" %>
+		<%= link_to 'Destroy', @link, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-default" %>
+	</div>
+<% end %>
+
+<h3 class="comments_title">
+  <%= @link.comments.count %> Comments
+</h3>
+
+<div id="comments">
+  <%= render :partial => @link.comments %>
+</div>
+<%= simple_form_for [@link, Comment.new]  do |f| %>
+  <div class="field">
+    <%= f.text_area :body, class: "form-control" %>
+  </div>
+  <br>
+  <%= f.submit "Add Comment", class: "btn btn-primary" %>
+<% end %>
